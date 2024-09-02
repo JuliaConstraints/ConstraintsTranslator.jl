@@ -1,0 +1,30 @@
+We need to determine the optimal set of routes for a fleet of vehicles to deliver goods to a set of customers.
+Each route must stard and end at the depot. 
+Each customer has a specific time window during which the delivery must occur, and each vehicle has a maximum capacity. 
+The objective is to minimize the total travel distance while ensuring all deliveries are made within the specified time windows and without exceeding vehicle capacities.
+
+Example input data:
+1. vehicles.csv
+vehicle_id,capacity
+1,15
+2,15
+
+2. customers.csv
+customer_id,location,demand,time_window_start,time_window_end
+1,LocA,5,08:00,10:00
+2,LocB,7,09:00,11:00
+3,LocC,4,10:00,12:00
+4,LocD,6,07:00,09:00
+
+3. distances.csv
+from,to,distance
+Depot,LocA,5
+Depot,LocB,10
+Depot,LocC,7
+Depot,LocD,3
+LocA,LocB,6
+LocA,LocC,8
+LocA,LocD,4
+LocB,LocC,2
+LocB,LocD,5
+LocC,LocD,3

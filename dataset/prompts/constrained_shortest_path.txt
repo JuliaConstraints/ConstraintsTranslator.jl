@@ -1,0 +1,20 @@
+We need to find the shortest path, in terms of the number of hops, between a given source and destination in a capacitated graph. 
+Each link in the graph has a physical length and a capacity. 
+The objective is to find the path that minimizes the number of hops while satisfying constraints on the path's capacity (which is the minimum edge capacity along the path) and the total path length.
+
+Example input data:
+1. graph.csv
+link_id,source_node,destination_node,capacity,length
+1,NodeA,NodeB,10,5
+2,NodeB,NodeC,15,7
+3,NodeA,NodeC,8,12
+4,NodeC,NodeD,12,3
+5,NodeB,NodeD,9,4
+
+2. source_destination.csv
+source_node,destination_node
+NodeA,NodeD
+
+3. constraints.csv
+min_path_capacity,max_path_length
+9,15

@@ -1,0 +1,16 @@
+I am planning a vacation and need to pack my suitcase, which has a strict weight limit. 
+I have several items to choose from, each with its own weight and level of importance. 
+The goal is to select the combination of items that will ensure the best possible vacation experience while staying within the allowed weight limit.
+
+Example input data:
+1. items.csv
+item_id,item_name,weight,importance
+1,ski_combination,7,low
+2,warm_clothes,4,normal
+3,hiking_boots,3,high
+4,hiking_book,1,high
+5,umbrella,2,normal
+
+2. weight.csv
+weight_limit
+10

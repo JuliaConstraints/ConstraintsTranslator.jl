@@ -1,0 +1,23 @@
+You are tasked with creating a seating arrangement for a wedding reception. 
+The reception will be held in a venue with round tables, each seating 8 people.
+The bride and groom must be seated at the same table (Table 1).
+Immediate family members of the bride and groom must be seated at Tables 1 and 2.
+Couples must be seated together.
+People with known conflicts (e.g., divorced couples, family feuds) must be seated at different tables.
+Maximize the number of guests seated with others they know, and seat guests with similar interests together when possible.
+
+Example input data:
+1. guests.csv
+guest_id,name,group,dietary_requirement,mobility_issue,interests
+1,John Smith,Groom's Family,None,No,Sports
+2,Jane Smith,Groom's Family,Vegetarian,No,Art
+3,Alice Johnson,Bride's Family,Nut Allergy,Yes,Music
+4,Bob Johnson,Bride's Family,None,No,Travel
+
+2. relationships.csv
+guest_id1,guest_id2,relationship
+1,2,Couple
+3,4,Couple
+5,6,Conflict
+7,8,Strangers
+1,6,Friends

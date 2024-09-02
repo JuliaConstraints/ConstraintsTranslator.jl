@@ -1,0 +1,8 @@
+We need to find a feasible Golomb ruler of a specified length m and order n.
+A Golomb ruler is a set of n marks placed along a ruler such that all pairwise distances between marks are distinct. 
+The goal is to determine the positions of the marks that satisfy the distinct distance condition for the given length.
+
+Example input data:
+1. input.csv
+ruler_length,number_of_marks
+10,4
