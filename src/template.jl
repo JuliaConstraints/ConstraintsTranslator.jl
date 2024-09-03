@@ -1,4 +1,4 @@
-abstract type AbstractMetadata end
+abstract type AbstractMessage end
 abstract type AbstractTemplate end
 
 """
@@ -72,6 +72,9 @@ TODO: validate the JSON data against a schema to ensure it is valid before parsi
 
 # Returns
 - `PromptTemplate`: A `PromptTemplate` structure encapsulating the metadata, system, and user messages.
+
+# Raises
+- `ErrorException`: if the template does not match the specification format.
 """
 function read_template(data_path::String)::PromptTemplate
     file_content = read(data_path, String)
@@ -124,7 +127,7 @@ Formats a `PromptTemplate` by substituting all variables in the system and user 
 - `Prompt`: A `Prompt` struct with the system and user messages containing the substituted values.
 
 # Raises
-- `ArgumentError`: If any variables specified in the system or user templates are not present in the `kwargs`.
+- `ErrorException`: If any variables specified in the system or user templates are not present in the `kwargs`.
 - `Warning`: If there are extra `kwargs` that are not used in the templates.
 """
 function format_template(template::PromptTemplate; kwargs...)
