@@ -78,7 +78,7 @@ TODO: validate the JSON data against a schema to ensure it is valid before parsi
 """
 function read_template(data_path::String)::PromptTemplate
     file_content = read(data_path, String)
-    data = JSON.parse(file_content)
+    data = JSON3.read(file_content)
 
     metadata = nothing
     system = nothing
@@ -134,28 +134,31 @@ function format_template(template::PromptTemplate; kwargs...)
     system = template.system.content
     user = template.user.content
 
-    template_vars = union(Set(template.system.variables), Set(template.user.variables))
+    template_vars = union(
+        Set(Symbol.(template.system.variables)),
+        Set(Symbol.(template.user.variables)),
+    )
     kwargs_keys = Set(keys(kwargs))
 
     # Check for missing variables in kwargs
-    missing_vars = template_vars - kwargs_keys
+    missing_vars = setdiff(template_vars, kwargs_keys)
     if !isempty(missing_vars)
         error("Missing variables in kwargs: $(collect(missing_vars))")
     end
 
     # Check for extra kwargs
-    extra_kwargs = kwargs_keys - template_vars
+    extra_kwargs = setdiff(kwargs_keys, template_vars)
     if !isempty(extra_kwargs)
         @warn "Extra kwargs will be ignored: $(collect(extra_kwargs))"
     end
 
     # Substitute variables in the system and user content
     for var in template.system.variables
-        system = replace(system, "{{$(var)}}", kwargs[var])
+        system = replace(system, "{{$(var)}}" => kwargs[Symbol(var)])
     end
 
     for var in template.user.variables
-        user = replace(user, "{{$(var)}}", kwargs[var])
+        user = replace(user, "{{$(var)}}" => kwargs[Symbol(var)])
     end
 
     return Prompt(system, user)

@@ -26,3 +26,17 @@ function parse_code(s::String)
 
     return code_dict
 end
+
+"""
+    edit_in_vim(s::String)
+Edits the input string `s` in a temporary file using the Vim editor.
+Returns the modified string after the editor is closed.
+"""
+function edit_in_vim(initial_text::String)
+    temp_filename = tempname()
+    write(temp_filename, initial_text)
+    run(`vim $temp_filename`)
+    edited_text = read(temp_filename, String)
+    rm(temp_filename)
+    return edited_text
+end

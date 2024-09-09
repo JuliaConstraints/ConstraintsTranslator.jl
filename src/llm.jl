@@ -86,7 +86,7 @@ end
 """
     stream_completion(llm::GroqLLM, prompt::Prompt)
 Returns a completion for the given prompt using the Groq LLM API.
-The completion is streamed as it is generated and printed to the terminal.
+The completion is streamed to the terminal as it is generated.
 """
 function stream_completion(llm::GroqLLM, prompt::Prompt)
     headers = [
@@ -136,7 +136,7 @@ end
 """
     stream_completion(llm::GoogleLLM, prompt::Prompt)
 Returns a completion for the given prompt using the Google Gemini LLM API.
-The completion is streamed as it is generated and printed to the terminal.
+The completion is streamed to the terminal as it is generated.
 """
 function stream_completion(llm::GoogleLLM, prompt::Prompt)
     url = replace(GEMINI_URL_STREAM, "{{model_id}}" => llm.model_id)
@@ -167,4 +167,22 @@ function stream_completion(llm::GoogleLLM, prompt::Prompt)
         end
     end
     return accumulated_content
+end
+
+"""
+    stream_completion(llm::AbstractLLM, prompt::AbstractPrompt)
+Returns a completion for a `prompt` using the `llm` model API.
+The completion is streamed to the terminal as it is generated.
+"""
+function stream_completion(llm::AbstractLLM, prompt::AbstractPrompt)
+    @warn "Not implemented for this LLM and/or prompt type. Falling back to get_completion."
+    return get_completion(llm, prompt)
+end
+
+"""
+    get_completion(llm::AbstractLLM, prompt::AbstractPrompt)
+Returns a completion for a `prompt` using the `llm` model API.
+"""
+function get_completion(llm::AbstractLLM, prompt::AbstractPrompt)
+    error("Not implemented for this LLM and/or prompt type.")
 end
