@@ -7,7 +7,3 @@ Example input data:
 1. items.csv
 item_id,width,height,length,quantity
 I1,1.2,0.5,3.0,10
-I2,2.0,0.8,1.5,5
-I3,0.5,0.5,0.5,20
-I4,1.8,1.5,4.0,3
-I5,1.0,1.0,2.0,15

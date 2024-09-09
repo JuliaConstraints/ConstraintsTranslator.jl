@@ -14,11 +14,3 @@ city_id,city_name
 from,to,distance
 CityA,CityB,10
 CityA,CityC,8
-CityA,CityD,15
-CityA,CityE,12
-CityB,CityC,5
-CityB,CityD,9
-CityB,CityE,7
-CityC,CityD,6
-CityC,CityE,4
-CityD,CityE,3

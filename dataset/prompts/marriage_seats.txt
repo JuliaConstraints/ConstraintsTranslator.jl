@@ -8,7 +8,7 @@ Maximize the number of guests seated with others they know, and seat guests with
 
 Example input data:
 1. guests.csv
-guest_id,name,group,dietary_requirement,mobility_issue,interests
+guest_id,name,group,dietary_requirement,interests
 1,John Smith,Groom's Family,None,No,Sports
 2,Jane Smith,Groom's Family,Vegetarian,No,Art
 3,Alice Johnson,Bride's Family,Nut Allergy,Yes,Music
