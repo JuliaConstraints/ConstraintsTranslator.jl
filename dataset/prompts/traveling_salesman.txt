@@ -6,9 +6,6 @@ Example input data:
 city_id,city_name
 1,CityA
 2,CityB
-3,CityC
-4,CityD
-5,CityE
 
 2. distances.csv
 from,to,distance

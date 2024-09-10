@@ -16,6 +16,7 @@ export Prompt
 export PromptTemplate
 export GroqLLM
 export GoogleLLM
+export LlamaCppLLM
 export get_completion
 export stream_completion
 export read_template

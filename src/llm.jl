@@ -43,6 +43,24 @@ struct GoogleLLM <: AbstractLLM
 end
 
 """
+    LlamaCppLLM
+Structure encapsulating the parameters for accessing the llama.cpp server API.
+- `api_key`: an optional API key for accessing the server
+- `url`: the URL of the llama.cpp server OpenAI API endpoint (e.g., http://localhost:8080)
+NOTE: we do not apply the appropriate chat templates to the prompt.
+This must be handled either in an external code path or by the server.
+"""
+struct LlamaCppLLM <: AbstractLLM
+    api_key::String
+    url::String
+
+    function LlamaCppLLM(url::String)
+        api_key = get(ENV, "LLAMA_CPP_API_KEY", "no-key")
+        new(api_key, url)
+    end
+end
+
+"""
     get_completion(llm::GroqLLM, prompt::Prompt)
 Returns a completion for the given prompt using the Groq LLM API.
 """
@@ -75,12 +93,86 @@ function get_completion(llm::GoogleLLM, prompt::Prompt)
     ]
     body = JSON3.write(Dict(
         "contents" => Dict(
-        "parts" => Dict("text" => prompt.system * prompt.user)
+        "parts" => Dict("text" => join([prompt.system, prompt.user], "\n"))
     ),
     ))
     response = HTTP.post(url, headers, body)
     body = JSON3.read(response.body)
     return body["candidates"][1]["content"]["parts"][1]["text"]
+end
+
+"""
+    get_completion(llm::LlamaCppLLM, prompt::Prompt)
+Returns a completion for the given prompt using the llama.cpp server API.
+"""
+function get_completion(llm::LlamaCppLLM, prompt::Prompt)
+    url = join([llm.url, "v1/chat/completions"], "/")
+    header = [
+        "Authorization" => "Bearer $(llm.api_key)",
+        "Content-Type" => "application/json",
+    ]
+    body = JSON3.write(Dict(
+        "messages" => [
+        Dict("role" => "system", "content" => prompt.system),
+        Dict("role" => "user", "content" => prompt.user),
+    ],
+    ))
+    response = HTTP.post(url, header, body)
+    body = JSON3.read(response.body)
+    return body["choices"][1]["message"]["content"]
+end
+
+"""
+    stream_completion(llm::LlamaCppLLM, prompt::Prompt)
+Returns a completion for the given prompt using the Groq LLM API.
+The completion is streamed to the terminal as it is generated.
+"""
+function stream_completion(llm::LlamaCppLLM, prompt::Prompt)
+    url = join([llm.url, "v1/chat/completions"], "/")
+    headers = [
+        "Authorization" => "Bearer $(llm.api_key)",
+        "Content-Type" => "application/json",
+    ]
+    body = JSON3.write(Dict(
+        "messages" => [
+            Dict("role" => "system", "content" => prompt.system),
+            Dict("role" => "user", "content" => prompt.user),
+        ],
+        "stream" => true,
+    ))
+
+    accumulated_content = ""
+    event_buffer = ""
+
+    HTTP.open(:POST, url, headers; body = body) do io
+        write(io, body)
+        HTTP.closewrite(io)
+        HTTP.startread(io)
+        while !eof(io)
+            chunk = String(readavailable(io))
+            events = split(chunk, "\n\n")
+            if !endswith(event_buffer, "\n\n")
+                event_buffer = events[end]
+                events = events[1:(end - 1)]
+            else
+                event_buffer = ""
+            end
+            events = join(events, "\n")
+            for line in eachmatch(r"(?<=data: ).*", events, overlap = true)
+                if line.match == "[DONE]"
+                    print("\n")
+                    break
+                end
+                message = JSON3.read(line.match)
+                if !isempty(message["choices"][1]["delta"])
+                    print(message["choices"][1]["delta"]["content"])
+                    accumulated_content *= message["choices"][1]["delta"]["content"]
+                end
+            end
+        end
+        HTTP.closeread(io)
+    end
+    return accumulated_content
 end
 
 """
@@ -107,6 +199,8 @@ function stream_completion(llm::GroqLLM, prompt::Prompt)
 
     HTTP.open(:POST, GROQ_URL, headers; body = body) do io
         write(io, body)
+        HTTP.closewrite(io)
+        HTTP.startread(io)
         while !eof(io)
             chunk = String(readavailable(io))
             events = split(chunk, "\n\n")
@@ -129,6 +223,7 @@ function stream_completion(llm::GroqLLM, prompt::Prompt)
                 end
             end
         end
+        HTTP.closeread(io)
     end
     return accumulated_content
 end
@@ -154,6 +249,8 @@ function stream_completion(llm::GoogleLLM, prompt::Prompt)
 
     HTTP.open(:POST, url, headers; body = body) do io
         write(io, body)
+        HTTP.closewrite(io)
+        HTTP.startread(io)
         while !eof(io)
             chunk = String(readavailable(io))
             line = match(r"(?<=data: ).*", chunk)
@@ -165,6 +262,7 @@ function stream_completion(llm::GoogleLLM, prompt::Prompt)
             print(message["candidates"][1]["content"]["parts"][1]["text"])
             accumulated_content *= String(message["candidates"][1]["content"]["parts"][1]["text"])
         end
+        HTTP.closeread(io)
     end
     return accumulated_content
 end

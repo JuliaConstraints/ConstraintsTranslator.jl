@@ -76,9 +76,18 @@ TODO: validate the JSON data against a schema to ensure it is valid before parsi
 # Raises
 - `ErrorException`: if the template does not match the specification format.
 """
-function read_template(data_path::String)::PromptTemplate
+function read_template(data_path::String)
     file_content = read(data_path, String)
     data = JSON3.read(file_content)
+
+    package_path = pkgdir(@__MODULE__)
+    schema_path = joinpath(package_path, "templates", "TemplateSchema.json")
+    schema_content = read(schema_path, String)
+    schema = JSONSchema.Schema(JSON3.read(schema_content))
+
+    if !isnothing(JSONSchema.validate(schema, data))
+        error("Invalid template format.")
+    end
 
     metadata = nothing
     system = nothing
@@ -102,13 +111,7 @@ function read_template(data_path::String)::PromptTemplate
                 item["content"],
                 item["variables"],
             )
-        else
-            error("Unknown message type: $_type")
         end
-    end
-
-    if isnothing(metadata) || isnothing(system) || isnothing(user)
-        error("Template must contain metadata, system, and user messages")
     end
 
     return PromptTemplate(metadata, system, user)
