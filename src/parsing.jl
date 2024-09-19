@@ -32,10 +32,11 @@ end
 Edits the input string `s` in a temporary file using the Vim editor.
 Returns the modified string after the editor is closed.
 """
-function edit_in_vim(initial_text::String)
+function edit_in_editor(initial_text::String; editor = "vim")
     temp_filename = tempname()
     write(temp_filename, initial_text)
-    run(`vim $temp_filename`)
+    InteractiveUtils.edit(temp_filename)
+    # run(`vim $temp_filename`
     edited_text = read(temp_filename, String)
     rm(temp_filename)
     return edited_text
