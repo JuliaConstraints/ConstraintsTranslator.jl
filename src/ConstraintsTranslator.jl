@@ -1,15 +1,14 @@
 module ConstraintsTranslator
 
 # Imports
+import Constraints: USUAL_CONSTRAINTS
 import HTTP
+import InteractiveUtils
 import JSONSchema
 import JSON3
-import TestItems: @testitem
-import Constraints: USUAL_CONSTRAINTS
 import REPL
 using REPL.TerminalMenus
-
-import InteractiveUtils
+import TestItems: @testitem
 
 # Exports
 export AbstractLLM
