@@ -14,7 +14,7 @@ struct GroqLLM <: AbstractLLM
     api_key::String
     model_id::String
 
-    function GroqLLM(model_id::String)
+    function GroqLLM(model_id::String = "llama-3.1-8b-instant")
         api_key = get(ENV, "GROQ_API_KEY", "")
         if isempty(api_key)
             error("Environment variable GROQ_API_KEY is not set")
@@ -33,7 +33,7 @@ struct GoogleLLM <: AbstractLLM
     api_key::String
     model_id::String
 
-    function GoogleLLM(model_id::String)
+    function GoogleLLM(model_id::String = "gemini-1.5-pro")
         api_key = get(ENV, "GOOGLE_API_KEY", "")
         if isempty(api_key)
             error("Environment variable GOOGLE_API_KEY is not set")
