@@ -9,6 +9,8 @@ import Constraints: USUAL_CONSTRAINTS
 import REPL
 using REPL.TerminalMenus
 
+import InteractiveUtils
+
 # Exports
 export AbstractLLM
 export parse_code

@@ -27,10 +27,10 @@ function extract_structure(
         if choice == 1
             break
         elseif choice == 2
-            response = edit_in_vim(response)
+            response = edit_in_editor(response)
             println(response)
         elseif choice == 3
-            description = edit_in_vim(description)
+            description = edit_in_editor(description)
             prompt = format_template(template; description, constraints)
             response = stream_completion(model, prompt)
         elseif choice == 4
@@ -65,10 +65,10 @@ function jumpify_model(
         if choice == 1
             break
         elseif choice == 2
-            response = edit_in_vim(response)
+            response = edit_in_editor(response)
             println(response)
         elseif choice == 3
-            description = edit_in_vim(description)
+            description = edit_in_editor(description)
             prompt = format_template(template; description, examples)
             response = stream_completion(model, prompt)
         elseif choice == 4

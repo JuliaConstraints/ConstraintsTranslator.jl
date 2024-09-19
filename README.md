@@ -24,8 +24,12 @@ using ConstraintsTranslator
 
 llm = GoogleLLM("gemini-1.5-pro")
 
+# Optional setup of a terminal editor (uncomment and select a viable editor on your machine such as vim, nano, emacs, ...)
+ENV["EDITOR"] = "vim"
+
+
 description = """
-We need to determine the shortest possible route for a salesman who must visit a set of cities exactly once and return to the starting city. 
+We need to determine the shortest possible route for a salesman who must visit a set of cities exactly once and return to the starting city.
 The objective is to minimize the total travel distance while ensuring that each city is visited exactly once.
 
 Example input data:
@@ -43,7 +47,7 @@ CityA,CityC,8
 response = translate(llm, description)
 ```
 
-The `translate` function will first produce a Markdown representation of the problem, and then return the generated Julia code for parsing the input data and building the model. 
+The `translate` function will first produce a Markdown representation of the problem, and then return the generated Julia code for parsing the input data and building the model.
 
 This example uses Google Gemini as an LLM. You will need an API key and a model id to access proprietary API endpoints. Use `help?>` in the Julia REPL to learn more about the available models.
 
