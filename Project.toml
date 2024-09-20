@@ -3,13 +3,34 @@ uuid = "314c63f5-3dda-4b35-95e7-4cc933f13053"
 authors = ["Jean-François BAFFIER (@Azzaare)"]
 version = "0.0.1"
 
+[deps]
+Constraints = "30f324ab-b02d-43f0-b619-e131c61659f7"
+HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
+InteractiveUtils = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
+JSON3 = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
+JSONSchema = "7d188eb4-7ad8-530c-ae41-71a32a6d4692"
+REPL = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
+TestItems = "1c621080-faea-4a02-84b6-bbd5e436b8fe"
+
 [compat]
+Aqua = "0.8"
+Constraints = "0.5"
+HTTP = "1.10"
+InteractiveUtils = "1"
+JET = "0.9"
+JSON3 = "1"
+JSONSchema = "1"
+REPL = "1"
+Test = "1"
+TestItemRunner = "1"
+TestItems = "1"
 julia = "1.10"
 
 [extras]
 Aqua = "4c88cf16-eb10-579e-8560-4a9242c79595"
 JET = "c3a54625-cd67-489e-a8e7-0a5a0ff4e31b"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+TestItemRunner = "f8b46487-2199-4994-9208-9a1283c18c0a"
 
 [targets]
-test = ["Aqua", "JET", "Test"]
+test = ["Aqua", "JET", "Test", "TestItemRunner"]

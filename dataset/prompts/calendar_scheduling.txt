@@ -1,0 +1,17 @@
+We are tasked with scheduling a set of meetings within a specific time frame, ensuring that no meetings overlap and all required participants can attend each meeting. 
+The objective is to find a feasible schedule that accommodates the availability of all participants and fits within the given time constraints.
+
+Example input data:
+1. meetings.csv
+meeting_id,duration,participants
+1,1,John;Alice
+2,2,John;Bob
+3,1,Alice;Charlie
+4,1,Bob;Charlie
+
+2. availability.csv
+participant_id,availability_start,availability_end
+John,09:00,12:00
+Alice,10:00,13:00
+Bob,09:00,11:00
+Charlie,11:00,14:00

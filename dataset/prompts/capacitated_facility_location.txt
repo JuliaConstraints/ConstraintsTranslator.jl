@@ -1,0 +1,15 @@
+We aim to solve a Capacitated Facility Location problem where a set of facilities and customers is given.
+The objective is to minimize the total cost of opening facilities and serving customers while ensuring that each customer's demand is fully satisfied, and no facility exceeds its capacity.
+
+Example input data:
+1. facilities.csv
+facility_id,opening_cost,capacity
+1,5,15
+
+2. customers.csv
+customer_id,demand
+1,5
+
+3. transport_cost.csv
+facility_id,customer_id,cost
+1,1,3

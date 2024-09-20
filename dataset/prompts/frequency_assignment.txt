@@ -1,0 +1,33 @@
+We need to assign radio frequencies to a set of transmitters in a telecommunication network. 
+Each transmitter must be assigned a frequency from a given set of available frequencies. 
+The objective is to minimize interference between transmitters while using the minimum number of distinct frequencies.
+The interference between two transmitters is proportional to the square of their geographical distance and the absolute difference between their assigned frequencies.
+Each transmitter must be assigned exactly one frequency.
+The frequency assigned to a transmitter must be within its allowed frequency range.
+Transmitters that are geographically close to each other must have a minimum frequency separation to avoid interference.
+Some transmitters may have pre-assigned frequencies that cannot be changed. Pre_assigned_frequency of -1 means no pre-assignment.
+
+Example input data:
+1. transmitters.csv
+transmitter_id,x_coordinate,y_coordinate,min_frequency,max_frequency,pre_assigned_frequency
+T1,10,20,1,10,-1
+T2,15,25,1,10,-1
+T3,30,40,1,15,-1
+T4,35,45,1,15,7
+T5,50,60,5,20,-1
+
+available_frequencies.csv
+frequency_id,frequency_value
+F1,1
+F2,2
+F3,3
+F4,4
+F5,5
+
+3. interference_matrix.csv
+transmitter1_id,transmitter2_id,min_frequency_separation,interference_cost
+T1,T2,2,10
+T1,T3,1,5
+T1,T4,1,3
+T1,T5,0,1
+T2,T3,2,8

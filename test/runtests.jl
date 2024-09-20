@@ -1,14 +1,13 @@
-using ConstraintsTranslator
-using Test
 using Aqua
+using ConstraintsTranslator
 using JET
+using Test
+using TestItemRunner
+using TestItems
 
 @testset "ConstraintsTranslator.jl" begin
-    @testset "Code quality (Aqua.jl)" begin
-        Aqua.test_all(ConstraintsTranslator)
-    end
-    @testset "Code linting (JET.jl)" begin
-        JET.test_package(ConstraintsTranslator; target_defined_modules = true)
-    end
-    # Write your tests here.
+    include("Aqua.jl")
+    include("JET.jl")
+    include("TestItemRunner.jl")
+    include("parsing.jl")
 end

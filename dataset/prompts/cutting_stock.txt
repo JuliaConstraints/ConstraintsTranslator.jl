@@ -1,0 +1,12 @@
+We have a paper roll manufacturing company that produces standard rolls of paper, all of the same width but with a fixed length of 100 meters. 
+The company receives orders from customers for smaller rolls of different lengths. 
+Our task is to determine how to cut the standard rolls to fulfill these orders while minimizing the number of standard rolls used.
+
+Example input data:
+1. orders.csv
+order_id,length_required,quantity
+O1,30,5
+O2,45,3
+O3,65,2
+O4,50,4
+O5,80,1

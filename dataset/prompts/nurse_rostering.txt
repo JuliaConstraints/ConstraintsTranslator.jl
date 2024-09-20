@@ -1,0 +1,37 @@
+We need to create a weekly schedule for nurses in a hospital. 
+Each nurse must be assigned shifts for a 7-day week, with three shift types: morning (7:00-15:00), evening (15:00-23:00), and night (23:00-7:00).
+Each shift must be covered by the required number of nurses with appropriate skills.
+Nurses cannot be assigned to more than one shift per day.
+Each nurse must have at least 11 hours of rest between shifts.
+Each nurse should work between 30 and 40 hours per week.
+Each nurse should have at least one weekend day (Saturday or Sunday) off every two weeks.
+The number of night shifts for each nurse should be distributed fairly.
+The goal is to find a feasible schedule while maximizing fairness in satisfying nurse preferences.
+
+Example input data:
+
+1. nurses.csv
+nurse_id,name,skill_level,max_shifts_per_week,max_night_shifts_per_week
+N1,Alice,senior,5,2
+N2,Bob,junior,5,2
+N3,Charlie,senior,4,1
+N4,Diana,mid,5,2
+N5,Eve,junior,4,1
+
+2. shift_requirements.csv
+day,shift_type,required_seniors,required_mid,required_juniors
+Monday,morning,1,1,1
+Monday,evening,1,1,1
+Monday,night,1,0,1
+Tuesday,morning,1,1,1
+Tuesday,evening,1,1,1
+Tuesday,night,1,0,1
+
+3. nurse_preferences.csv
+nurse_id,day,shift_type,preference_score
+N1,Monday,morning,3
+N1,Monday,evening,1
+N1,Monday,night,0
+N2,Monday,morning,2
+N2,Monday,evening,2
+N2,Monday,night,1
