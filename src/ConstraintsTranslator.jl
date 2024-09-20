@@ -7,7 +7,7 @@ import InteractiveUtils
 import JSONSchema
 import JSON3
 import REPL
-using REPL.TerminalMenus
+import REPL.TerminalMenus: RadioMenu, request
 import TestItems: @testitem
 
 # Exports
@@ -30,5 +30,6 @@ include("template.jl")
 include("llm.jl")
 include("parsing.jl")
 include("translate.jl")
+include("utils.jl")
 
 end

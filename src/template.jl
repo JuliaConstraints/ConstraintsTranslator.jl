@@ -80,7 +80,7 @@ function read_template(data_path::String)
     file_content = read(data_path, String)
     data = JSON3.read(file_content)
 
-    package_path = pkgdir(@__MODULE__)
+    package_path = get_package_path()
     schema_path = joinpath(package_path, "templates", "TemplateSchema.json")
     schema_content = read(schema_path, String)
     schema = JSONSchema.Schema(JSON3.read(schema_content))

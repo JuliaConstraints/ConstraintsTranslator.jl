@@ -16,15 +16,33 @@ function parse_code(s::String)
     # Extract the code blocks and their language annotations
     for m in matches
         lang = m.captures[1] == "" ? "plain" : m.captures[1]
-        code = strip(m.captures[2])
-        if haskey(code_dict, lang)
-            code_dict[lang] *= "\n" * code
-        else
-            code_dict[lang] = code
+        code = m.captures[2]
+        if !isnothing(code)
+            code = strip(code)
+            if haskey(code_dict, lang)
+                code_dict[lang] *= "\n" * code
+            else
+                code_dict[lang] = code
+            end
         end
     end
 
     return code_dict
+end
+
+"""
+    check_syntax_errors(s::String)
+Parses the string `s` as Julia code. In the case of syntax errors, it returns the error 
+message of the parser as a string. Otherwise, it returns an empty string.
+"""
+function check_syntax_errors(s::String)
+    parsed_expr = Meta.parse(s, raise = false)
+    error_message = ""
+    if parsed_expr.head == :incomplete || parsed_expr.head == :error
+        parse_error = parsed_expr.args[1]
+        error_message = string(parse_error)
+    end
+    return error_message
 end
 
 """

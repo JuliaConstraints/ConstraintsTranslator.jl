@@ -1,3 +1,5 @@
+const MAX_RETRIES::Int = 3
+
 """
     extract_structure(model <: AbstractLLM, description <: AbstractString)
 Extracts the parameters, decision variables and constraints of an optimization problem 
@@ -8,36 +10,40 @@ function extract_structure(
         model::AbstractLLM,
         description::AbstractString,
         constraints::AbstractString,
+        interactive::Bool,
 )
-    package_path::String = pkgdir(@__MODULE__)
-    template_path = joinpath(package_path, "templates", "ExtractStructure.json")
-    template = read_template(template_path)
-    prompt = format_template(template; description, constraints)
+    package_path = get_package_path()
+    prompt_template_path = joinpath(package_path, "templates", "ExtractStructure.json")
+    prompt_template = read_template(prompt_template_path)
+
+    prompt = format_template(prompt_template; description, constraints)
     response = stream_completion(model, prompt)
 
-    options = [
-        "Accept the response",
-        "Edit the response",
-        "Try again with a different prompt",
-        "Try again with the same prompt",
-    ]
-    menu = RadioMenu(options; pagesize = 4)
+    if interactive
+        options = [
+            "Accept the response",
+            "Edit the response",
+            "Try again with a different prompt",
+            "Try again with the same prompt",
+        ]
+        menu = RadioMenu(options; pagesize = 5)
 
-    while true
-        choice = request("What do you want to do?", menu)
-        if choice == 1
-            break
-        elseif choice == 2
-            response = edit_in_editor(response)
-            println(response)
-        elseif choice == 3
-            description = edit_in_editor(description)
-            prompt = format_template(template; description, constraints)
-            response = stream_completion(model, prompt)
-        elseif choice == 4
-            response = stream_completion(model, prompt)
-        elseif choice == -1
-            InterruptException()
+        while true
+            choice = request("What do you want to do?", menu)
+            if choice == 1
+                break
+            elseif choice == 2
+                response = edit_in_editor(response)
+                println(response)
+            elseif choice == 3
+                description = edit_in_editor(description)
+                prompt = format_template(prompt_template; description, constraints)
+                response = stream_completion(model, prompt)
+            elseif choice == 4
+                response = stream_completion(model, prompt)
+            elseif choice == -1
+                InterruptException()
+            end
         end
     end
     return response
@@ -56,48 +62,63 @@ function jumpify_model(
         model::AbstractLLM,
         description::AbstractString,
         examples::AbstractString,
+        interactive::Bool,
 )
-    package_path::String = pkgdir(@__MODULE__)
+    package_path = get_package_path()
     template_path = joinpath(package_path, "templates", "JumpifyModel.json")
     template = read_template(template_path)
     prompt = format_template(template; description, examples)
     response = stream_completion(model, prompt)
 
-    while true
-        code = parse_code(response)["julia"]
-        parsed_expr = Meta.parse(code, raise = false)
-        error_message = ""
-        if parsed_expr.head == :incomplete || parsed_expr.head == :error
-            parse_error = parsed_expr.args[1]
-            error_message = string(parse_error)
+    if interactive
+        while true
+            code = parse_code(response)["julia"]
+            error_message = check_syntax_errors(code)
+
+            options = [
+                "Accept the response",
+                "Edit the response",
+                "Try again with a different prompt",
+                "Try again with the same prompt",
+            ]
+            if !isempty(error_message)
+                @warn "The generated Julia code has one or more syntax errors!"
+                push!(options, "Fix syntax errors")
+            end
+            menu = RadioMenu(options; pagesize = 5)
+
+            choice = request("What do you want to do?", menu)
+            if choice == 1
+                break
+            elseif choice == 2
+                response = edit_in_editor(response)
+                println(response)
+            elseif choice == 3
+                description = edit_in_editor(description)
+                prompt = format_template(template; description, examples)
+                response = stream_completion(model, prompt)
+            elseif choice == 4
+                response = stream_completion(model, prompt)
+            elseif choice == 5
+                response = fix_syntax_errors(model, code, error_message)
+            elseif choice == -1
+                InterruptException()
+            end
         end
-        options = [
-            "Accept the response",
-            "Edit the response",
-            "Try again with a different prompt",
-            "Try again with the same prompt",
-        ]
+    else
+        code = parse_code(response)["julia"]
+        error_message = check_syntax_errors(code)
         if !isempty(error_message)
             @warn "The generated Julia code has one or more syntax errors!"
-            push!(options, "Fix syntax errors")
-        end
-        menu = RadioMenu(options; pagesize = 5)
-        choice = request("What do you want to do?", menu)
-        if choice == 1
-            break
-        elseif choice == 2
-            response = edit_in_editor(response)
-            println(response)
-        elseif choice == 3
-            description = edit_in_editor(description)
-            prompt = format_template(template; description, examples)
-            response = stream_completion(model, prompt)
-        elseif choice == 4
-            response = stream_completion(model, prompt)
-        elseif choice == 5
-            response = fix_syntax_errors(model, code, error_message)
-        elseif choice == -1
-            InterruptException()
+            for _ in 1:MAX_RETRIES
+                response = fix_syntax_errors(model, code, error_message)
+                code = parse_code(response)["julia"]
+                error_message = check_syntax_errors(code)
+                if isempty(error_message)
+                    break
+                end
+                @warn "The generated Julia code has one or more syntax errors!"
+            end
         end
     end
     return response
@@ -110,7 +131,7 @@ an `error` produced by the Julia parser.
 Returns Markdown-formatted text containing the corrected code in a Julia code block.
 """
 function fix_syntax_errors(model::AbstractLLM, code::AbstractString, error::AbstractString)
-    package_path::String = pkgdir(@__MODULE__)
+    package_path = get_package_path()
     template_path = joinpath(package_path, "templates", "FixJuliaSyntax.json")
     template = read_template(template_path)
     prompt = format_template(template; code, error)
@@ -122,17 +143,23 @@ end
     translate(model::AbstractLLM, description::AbstractString)
 Translate the natural-language `description` of an optimization problem into 
 a Constraint Programming model by querying the Large Language Model `model`.
+If `interactive`, the user will be prompted via the command line to inspect the 
+intermediate outputs of the LLM, and possibly modify them.
 """
-function translate(model::AbstractLLM, description::AbstractString)
+function translate(
+        model::AbstractLLM,
+        description::AbstractString,
+        interactive::Bool = false,
+)
     constraints = String[]
     for (name, cons) in USUAL_CONSTRAINTS
         push!(constraints, "$(name): $(lstrip(cons.description))")
     end
     constraints = join(constraints, "\n")
 
-    structure = extract_structure(model, description, constraints)
+    structure = extract_structure(model, description, constraints, interactive)
 
-    package_path::String = pkgdir(@__MODULE__)
+    package_path = get_package_path()
     examples_path = joinpath(package_path, "examples")
     examples_files = filter(x -> endswith(x, ".md"), readdir(examples_path))
     examples = []
@@ -142,7 +169,7 @@ function translate(model::AbstractLLM, description::AbstractString)
     end
     examples = join(examples, "\n")
 
-    response = jumpify_model(model, structure, examples)
+    response = jumpify_model(model, structure, examples, interactive)
 
     return parse_code(response)["julia"]
 end
