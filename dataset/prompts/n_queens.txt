@@ -1,0 +1,2 @@
+I want to solve an n-queen puzzle where n is a positive integer.
+The n-queen puzzle is the problem of placing n queens on an n x n chessboard such that no two queens can attack each other.

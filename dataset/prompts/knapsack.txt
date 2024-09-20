@@ -1,0 +1,16 @@
+We aim to solve a Knapsack problem where a set of items is given. 
+For each item, we define a binary decision variable to indicate whether the item is included in the knapsack. 
+The objective is to maximize the total utility of the selected items without exceeding a given weight limit.
+
+Example input data:
+1. items.csv
+item_id,weight,utility
+1,2,2
+2,3,3
+3,7,1
+4,4,2
+5,1,3
+
+2. weight.csv
+weight_limit
+10

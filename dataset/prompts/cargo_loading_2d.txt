@@ -1,0 +1,9 @@
+We are working for a logistics company that handles cargo shipping in containers. 
+Each container has a fixed width of 2.5 meters and a height of 2.5 meters. 
+The company receives orders to ship various items, each with specific dimensions. 
+The task is to determine how to load the items into the containers to minimize the number of containers used, while ensuring that no items are rotated and all items fit within the container’s dimensions.
+
+Example input data:
+1. items.csv 
+item_id,width,height,quantity 
+I1,1.2,0.5,10 

@@ -1,0 +1,96 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "array",
+    "properties": {
+        "messages": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "content": {
+                            "type": "string"
+                        },
+                        "description": {
+                            "type": "string"
+                        },
+                        "version": {
+                            "type": "string"
+                        },
+                        "source": {
+                            "type": "string"
+                        },
+                        "_type": {
+                            "type": "string",
+                            "enum": [
+                                "metadatamessage"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "content",
+                        "description",
+                        "version",
+                        "source",
+                        "_type"
+                    ]
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "content": {
+                            "type": "string"
+                        },
+                        "variables": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "_type": {
+                            "type": "string",
+                            "enum": [
+                                "systemmessage"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "content",
+                        "variables",
+                        "_type"
+                    ]
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "content": {
+                            "type": "string"
+                        },
+                        "variables": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "_type": {
+                            "type": "string",
+                            "enum": [
+                                "usermessage"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "content",
+                        "variables",
+                        "_type"
+                    ]
+                }
+            ]
+        }
+    },
+    "required": [
+        "messages"
+    ]
+}

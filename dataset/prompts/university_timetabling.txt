@@ -1,0 +1,40 @@
+We need to create a weekly timetable for university courses. 
+Each course must be assigned specific time slots and a room for a 5-day week (Monday to Friday), with time slots from 9:00 to 17:00 in 1-hour increments. 
+The timetable must satisfy the following rules:
+1. No teacher can teach more than one course simultaneously.
+2. No student group can attend more than one course simultaneously.
+3. Each room can host only one course at a time.
+4. The assigned room must have sufficient capacity for the course's enrolled students.
+5. Courses requiring special equipment must be assigned to rooms with that equipment.
+6. Each course must be scheduled for its required number of hours per week.
+7. Courses must be scheduled within the defined working hours (9:00 to 17:00, Monday to Friday).
+The goal is to find a feasible schedule that satisfies all these constraints while minimizing the number of idle periods for both teachers and student groups.
+
+Example input data:
+
+1. courses.csv
+course_id,name,teacher_id,student_group,enrolled_students,hours_per_week,required_equipment
+CS101,Intro to Programming,T1,G1,30,3,computers
+MATH201,Calculus,T2,G1,25,4,none
+PHYS101,Physics I,T3,G2,20,3,lab
+ENG201,Literature,T4,G2,15,2,none
+
+2. teachers.csv
+teacher_id,name,max_hours_per_day
+T1,Dr. Smith,6
+T2,Prof. Johnson,4
+T3,Dr. Brown,5
+T4,Dr. Davis,3
+
+3. rooms.csv
+room_id,capacity,equipment
+R101,35,none
+R102,30,computers
+R103,25,lab
+R104,40,none
+
+4. time_slots.csv
+slot_id,day,start_time,end_time
+1,Monday,09:00,10:00
+2,Monday,10:00,11:00
+3,Monday,11:00,12:00
