@@ -4,7 +4,7 @@
 [![Coverage](https://codecov.io/gh/Azzaare/ConstraintsTranslator.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/Azzaare/ConstraintsTranslator.jl)
 [![Aqua](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
 
-A package for translating natural-language descriptions of optimization problems into Constraint Programming models to be solved via [`CBLS.jl`](https://github.com/JuliaConstraints/CBLS.jl) using Large Language Models (LLMs).
+A package for translating natural-language descriptions of optimization problems into Constraint Programming models using Large Language Models (LLMs). For this pre-stable version stage, our target is to have models solved via [`CBLS.jl`](https://github.com/JuliaConstraints/CBLS.jl). Eventually, we expect this library to work for most of Julia CP ecosystem, alongside toher CP modeling languages such as MiniZinc, OR-Tools, etc.
 
 This package acts as a light wrapper around common LLM API endpoints, supplying appropriate system prompts and context informations to the LLMs to generate CP models. Specifically, we first prompt the model for generating an high-level representation of the problem in editable Markdown format, and then we prompt the model to generate Julia code.
 
