@@ -4,7 +4,7 @@
 [![Coverage](https://codecov.io/gh/Azzaare/ConstraintsTranslator.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/Azzaare/ConstraintsTranslator.jl)
 [![Aqua](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
 
-A package for translating natural-language descriptions of optimization problems into Constraint Programming models using Large Language Models (LLMs). For this pre-stable version stage, our target is to have models solved via [`CBLS.jl`](https://github.com/JuliaConstraints/CBLS.jl). Eventually, we expect this library to work for most of Julia CP ecosystem, alongside toher CP modeling languages such as MiniZinc, OR-Tools, etc.
+A package for translating natural-language descriptions of optimization problems into Constraint Programming models using Large Language Models (LLMs). For this pre-stable version stage, our target is to have models solved via [`CBLS.jl`](https://github.com/JuliaConstraints/CBLS.jl). Eventually, we expect this library to work for most of Julia CP ecosystem, alongside other CP modeling languages such as MiniZinc, OR-Tools, etc.
 
 This package acts as a light wrapper around common LLM API endpoints, supplying appropriate system prompts and context informations to the LLMs to generate CP models. Specifically, we first prompt the model for generating an high-level representation of the problem in editable Markdown format, and then we prompt the model to generate Julia code.
 
@@ -22,11 +22,15 @@ To begin playing with the package, you can start from the example below:
 ```julia
 using ConstraintsTranslator
 
-llm = GoogleLLM("gemini-1.5-pro")
-
 # Optional setup of a terminal editor (uncomment and select a viable editor on your machine such as vim, nano, emacs, ...)
+# The EDITOR variable *must* be set for the interactive mode to work properly.
 ENV["EDITOR"] = "vim"
 
+# Optional setup of an API key for proprietary models.
+# The appropriate API key environment variables *must* be set for using properietary LLMs.
+ENV["GOOGLE_API_KEY"] = "42"
+
+llm = GoogleLLM("gemini-1.5-pro")
 
 description = """
 We need to determine the shortest possible route for a salesman who must visit a set of cities exactly once and return to the starting city.
@@ -54,4 +58,3 @@ This example uses Google Gemini as an LLM. You will need an API key and a model 
 At each generation step, it will prompt the user in an interactive menu to accept the answer, edit the prompt and/or the generated text, or generate another answer with the same prompt.
 
 The LLM expects the user to provide examples of the input data format. If no examples are present, the LLM will make assumptions about the data format based on the problem description.
-
