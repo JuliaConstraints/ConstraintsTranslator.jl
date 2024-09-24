@@ -1,6 +1,5 @@
 const GROQ_URL::String = "https://api.groq.com/openai/v1/chat/completions"
-const GEMINI_URL::String = "https://generativelanguage.googleapis.com/v1beta/models/{{model_id}}:generateContent"
-const GEMINI_URL_STREAM::String = "https://generativelanguage.googleapis.com/v1beta/models/{{model_id}}:streamGenerateContent?alt=sse"
+const GEMINI_URL::String = "https://generativelanguage.googleapis.com/v1beta/models/{{model_id}}"
 
 abstract type AbstractLLM end
 abstract type OpenAILLM <: AbstractLLM end
@@ -93,7 +92,8 @@ end
 Returns a completion for the given prompt using the Google Gemini LLM API.
 """
 function get_completion(llm::GoogleLLM, prompt::Prompt)
-    url = replace(GEMINI_URL, "{{model_id}}" => llm.model_id)
+    url = replace(llm.url, "{{model_id}}" => llm.model_id)
+    url *= ":generateContent"
     headers = [
         "x-goog-api-key" => "$(llm.api_key)",
         "Content-Type" => "application/json",
@@ -170,7 +170,8 @@ Returns a completion for the given prompt using the Google Gemini LLM API.
 The completion is streamed to the terminal as it is generated.
 """
 function stream_completion(llm::GoogleLLM, prompt::Prompt)
-    url = replace(GEMINI_URL_STREAM, "{{model_id}}" => llm.model_id)
+    url = replace(llm.url, "{{model_id}}" => llm.model_id)
+    url *= ":streamGenerateContent?alt=sse"
     headers = [
         "x-goog-api-key" => "$(llm.api_key)",
         "Content-Type" => "application/json",
