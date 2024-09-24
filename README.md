@@ -44,10 +44,12 @@ CityA,CityB,10
 CityA,CityC,8
 """
 
-response = translate(llm, description)
+response = translate(llm, description, interactive=true)
 ```
 
 The `translate` function will first produce a Markdown representation of the problem, and then return the generated Julia code for parsing the input data and building the model.
+
+The flag `interactive=true` will enable a simple interactive command-line application, where you will be able to inspect, edit and regenerate each intermediate output.
 
 This example uses Google Gemini as an LLM. You will need an API key and a model id to access proprietary API endpoints. Use `help?>` in the Julia REPL to learn more about the available models.
 
