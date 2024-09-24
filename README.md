@@ -55,7 +55,7 @@ CityA,CityB,10
 CityA,CityC,8
 """
 
-response = translate(llm, description)
+response = translate(llm, description, interactive=true)
 ```
 
 The `translate` function will first produce a Markdown representation of the problem, and then return the generated Julia code for parsing the input data and building the model.
