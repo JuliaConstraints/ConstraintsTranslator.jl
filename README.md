@@ -17,18 +17,25 @@ We currently support the following LLM APIs:
 Groq and Gemini are currently offering rate-limited free access to their APIs, and llama.cpp is free and open-source. We are still actively experimenting with this package, and we are not in a position to pay for API access. We might consider adding support for other APIs in the future.
 
 ## Workflow example
-To begin playing with the package, you can start from the example below:
+Before playing with the package, we need to set up two environment variables:
+1. The EDITOR variable for specifying a text editor (such as `vim`, `nano`, `emacs`, ...). This will be used during interactive execution.
+2. An API key. This is necessary only for interacting with proprietary LLMs.
 
+We can configure those variables by, e.g., appending the following to your `.bashrc` or equivalent:
+```bash
+export EDITOR="vim"
+export GOOGLE_API_KEY="42"
+```
+
+Or we can configure them in Julia:
+```julia
+ENV["EDITOR"] = "vim"
+ENV["GOOGLE_API_KEY"] = "42"
+```
+
+Finally, we can start playing with the package. Below, an example for translating a natural-language description of the Traveling Salesman Problem:
 ```julia
 using ConstraintsTranslator
-
-# Optional setup of a terminal editor (uncomment and select a viable editor on your machine such as vim, nano, emacs, ...)
-# The EDITOR variable *must* be set for the interactive mode to work properly.
-ENV["EDITOR"] = "vim"
-
-# Optional setup of an API key for proprietary models.
-# The appropriate API key environment variables *must* be set for using properietary LLMs.
-ENV["GOOGLE_API_KEY"] = "42"
 
 llm = GoogleLLM("gemini-1.5-pro")
 
@@ -53,8 +60,8 @@ response = translate(llm, description)
 
 The `translate` function will first produce a Markdown representation of the problem, and then return the generated Julia code for parsing the input data and building the model.
 
-This example uses Google Gemini as an LLM. You will need an API key and a model id to access proprietary API endpoints. Use `help?>` in the Julia REPL to learn more about the available models.
-
 At each generation step, it will prompt the user in an interactive menu to accept the answer, edit the prompt and/or the generated text, or generate another answer with the same prompt.
 
 The LLM expects the user to provide examples of the input data format. If no examples are present, the LLM will make assumptions about the data format based on the problem description.
+
+This example uses Google Gemini as an LLM. You will need an API key and a model id to access proprietary API endpoints. Use `help?>` in the Julia REPL to learn more about the available models.
