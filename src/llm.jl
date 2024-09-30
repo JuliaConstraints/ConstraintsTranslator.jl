@@ -18,7 +18,7 @@ struct GroqLLM <: OpenAILLM
     model_id::String
     url::String
 
-    function GroqLLM(model_id::String = "llama3-70b-8192", url = GROQ_URL)
+    function GroqLLM(model_id::String = "llama-3.1-70b-versatile", url = GROQ_URL)
         api_key = get(ENV, "GROQ_API_KEY", "")
         if isempty(api_key)
             error("Environment variable GROQ_API_KEY is not set")
@@ -41,7 +41,7 @@ struct GoogleLLM <: AbstractLLM
     model_id::String
     url::String
 
-    function GoogleLLM(model_id::String = "gemini-1.5-flash")
+    function GoogleLLM(model_id::String = "gemini-1.5-flash-latest")
         api_key = get(ENV, "GOOGLE_API_KEY", "")
         if isempty(api_key)
             error("Environment variable GOOGLE_API_KEY is not set")
@@ -202,6 +202,7 @@ function stream_completion(llm::GoogleLLM, prompt::Prompt)
             chunk = String(readavailable(io))
             for line in eachmatch(r"(?<=data: ).*", chunk)
                 if isnothing(line)
+                    print("\n")
                     continue
                 end
                 message = JSON3.read(line.match)
