@@ -1,5 +1,6 @@
 """
     get_package_path()
+
 Returns the absolute path of the root directory of `ConstraintsTranslator.jl`.
 """
 function get_package_path()
