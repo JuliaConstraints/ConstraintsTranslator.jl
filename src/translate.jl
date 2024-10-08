@@ -22,6 +22,7 @@ function extract_structure(
     if interactive
         options = [
             "Accept the response",
+            "Copy to clipboard",
             "Edit the response",
             "Try again with a different prompt",
             "Try again with the same prompt",
@@ -33,13 +34,16 @@ function extract_structure(
             if choice == 1
                 break
             elseif choice == 2
+                clipboard(response)
+                println("Response copied to the system's clipboard!")
+            elseif choice == 3
                 response = edit_in_editor(response)
                 println(response)
-            elseif choice == 3
+            elseif choice == 4
                 description = edit_in_editor(description)
                 prompt = format_template(prompt_template; description, constraints)
                 response = stream_completion(model, prompt)
-            elseif choice == 4
+            elseif choice == 5
                 response = stream_completion(model, prompt)
             elseif choice == -1
                 InterruptException()
@@ -77,6 +81,7 @@ function jumpify_model(
 
             options = [
                 "Accept the response",
+                "Copy to clipboard",
                 "Edit the response",
                 "Try again with a different prompt",
                 "Try again with the same prompt",
@@ -85,21 +90,24 @@ function jumpify_model(
                 @warn "The generated Julia code has one or more syntax errors!"
                 push!(options, "Fix syntax errors")
             end
-            menu = RadioMenu(options; pagesize = 5)
+            menu = RadioMenu(options; pagesize = 6)
 
             choice = request("What do you want to do?", menu)
             if choice == 1
                 break
             elseif choice == 2
+                clipboard(parse_code(response)["julia"])
+                println("Response copied to the system's clipboard!")
+            elseif choice == 3
                 response = edit_in_editor(response)
                 println(response)
-            elseif choice == 3
+            elseif choice == 4
                 description = edit_in_editor(description)
                 prompt = format_template(template; description, examples)
                 response = stream_completion(model, prompt)
-            elseif choice == 4
-                response = stream_completion(model, prompt)
             elseif choice == 5
+                response = stream_completion(model, prompt)
+            elseif choice == 6
                 response = fix_syntax_errors(model, code, error_message)
             elseif choice == -1
                 InterruptException()
