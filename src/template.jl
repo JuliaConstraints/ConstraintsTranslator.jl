@@ -19,6 +19,8 @@ struct MetadataMessage <: AbstractMessage
 end
 
 """
+    SystemMessage
+
 Represents the prompt template of a system message.
 The template can optionally contain string placeholders enclosed in double curly braces, e.g., `{{variable}}`.
 Placeholders must be replaced with actual values when generating prompts.
@@ -33,6 +35,8 @@ struct SystemMessage <: AbstractMessage
 end
 
 """
+    UserMessage
+
 Represents the prompt template of a user message.
 The template can optionally contain string placeholders enclosed in double curly braces, e.g., `{{variable}}`.
 Placeholders must be replaced with actual values when generating prompts.
@@ -47,6 +51,8 @@ struct UserMessage <: AbstractMessage
 end
 
 """
+    PromptTemplate
+
 Represents a complete prompt template, comprising metadata, system, and user messages.
 
 # Fields
@@ -63,7 +69,7 @@ end
 """
     read_template(data_path::String)
 
-Reads a prompt template from a JSON file specified by `data_path`. 
+Reads a prompt template from a JSON file specified by `data_path`.
 The function parses the JSON data and constructs a `PromptTemplate` object containing metadata, system, and user messages.
 TODO: validate the JSON data against a schema to ensure it is valid before parsing.
 
