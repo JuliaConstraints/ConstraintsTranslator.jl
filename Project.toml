@@ -1,7 +1,7 @@
 name = "ConstraintsTranslator"
 uuid = "314c63f5-3dda-4b35-95e7-4cc933f13053"
 authors = ["Jean-François BAFFIER (@Azzaare)"]
-version = "0.0.2"
+version = "0.0.3"
 
 [deps]
 Constraints = "30f324ab-b02d-43f0-b619-e131c61659f7"
@@ -24,7 +24,7 @@ REPL = "1"
 Test = "1"
 TestItemRunner = "1"
 TestItems = "1"
-julia = "1.10"
+julia = "1.11"
 
 [extras]
 Aqua = "4c88cf16-eb10-579e-8560-4a9242c79595"
