@@ -10,7 +10,7 @@ Create a JuMP model for an n x n magic square.
 """
 function magic_square(n)
     N = n^2
-    model = JuMP.Model(CBLS.Optimizer)
+    model = JuMP.Model()
     magic_constant = n * (N + 1) / 2
 
     @variable(model, 1 ≤ X[1:n, 1:n] ≤ N, Int)

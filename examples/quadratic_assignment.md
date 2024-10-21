@@ -1,7 +1,7 @@
 # Example for the Quadratic Assignment Problem
 ```julia
 """
-    qap(n, W, D)
+qap(n, W, D)
 
 Create a JuMP model for the Quadratic Assignment Problem (QAP).
 
@@ -11,7 +11,7 @@ Create a JuMP model for the Quadratic Assignment Problem (QAP).
 - `D::Matrix`: distance matrix.
 """
 function qap(n, W, D)
-    model = JuMP.Model(CBLS.Optimizer)
+    model = JuMP.Model()
 
     @variable(model, 1 ≤ X[1:n] ≤ n, Int)
     @constraint(model, X in AllDifferent())
