@@ -1,7 +1,7 @@
 # Example for the Quadratic Assignment Problem
 ```julia
 """
-qap(n, W, D)
+    qap(n, W, D)
 
 Create a JuMP model for the Quadratic Assignment Problem (QAP).
 
