@@ -4,6 +4,7 @@ module ConstraintsTranslator
 import Constraints: USUAL_CONSTRAINTS
 import HTTP
 import InteractiveUtils
+import InteractiveUtils: clipboard
 import JSONSchema
 import JSON3
 import REPL

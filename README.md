@@ -37,19 +37,14 @@ Finally, we can start playing with the package. Below, an example for translatin
 ```julia
 using ConstraintsTranslator
 
-llm = GoogleLLM("gemini-1.5-pro")
+llm = GoogleLLM("gemini-1.5-pro-latest")
 
 description = """
 We need to determine the shortest possible route for a salesman who must visit a set of cities exactly once and return to the starting city.
 The objective is to minimize the total travel distance while ensuring that each city is visited exactly once.
 
 Example input data:
-1. cities.csv
-city_id,city_name
-1,CityA
-2,CityB
-
-2. distances.csv
+1. distances.csv
 from,to,distance
 CityA,CityB,10
 CityA,CityC,8

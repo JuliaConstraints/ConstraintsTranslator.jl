@@ -6,17 +6,19 @@ abstract type OpenAILLM <: AbstractLLM end
 
 """
     GroqLLM
+
 Structure encapsulating the parameters for accessing the Groq LLM API.
+
 - `api_key`: an API key for accessing the Groq API (https://groq.com), read from the environmental variable GROQ_API_KEY.
 - `model_id`: a string identifier for the model to query. See https://console.groq.com/docs/models for the list of available models.
-- `url`: URL for chat completions. Defaults to "https://api.groq.com/openai/v1/chat/completions".
+- `url`: URL for chat completions. Defaults to `https://api.groq.com/openai/v1/chat/completions``.
 """
 struct GroqLLM <: OpenAILLM
     api_key::String
     model_id::String
     url::String
 
-    function GroqLLM(model_id::String = "llama3-70b-8192", url = GROQ_URL)
+    function GroqLLM(model_id::String = "llama-3.1-70b-versatile", url = GROQ_URL)
         api_key = get(ENV, "GROQ_API_KEY", "")
         if isempty(api_key)
             error("Environment variable GROQ_API_KEY is not set")
@@ -26,18 +28,20 @@ struct GroqLLM <: OpenAILLM
 end
 
 """
-    Google LLM
+    GoogleLLM
+
 Structure encapsulating the parameters for accessing the Google LLM API.
-- `api_key`: an API key for accessing the Google Gemini API (https://ai.google.dev/gemini-api/docs/), read from the environmental variable GOOGLE_API_KEY.
+
+- `api_key`: an API key for accessing the Google Gemini API (https://ai.google.dev/gemini-api/docs/), read from the environmental variable `GOOGLE_API_KEY`.
 - `model_id`: a string identifier for the model to query. See https://ai.google.dev/gemini-api/docs/models/gemini for the list of available models.
-- `url`: URL for chat completions. Defaults to ""https://generativelanguage.googleapis.com/v1beta/models/{{model_id}}".
+- `url`: URL for chat completions. Defaults to `https://generativelanguage.googleapis.com/v1beta/models/{{model_id}}`.
 """
 struct GoogleLLM <: AbstractLLM
     api_key::String
     model_id::String
     url::String
 
-    function GoogleLLM(model_id::String = "gemini-1.5-flash")
+    function GoogleLLM(model_id::String = "gemini-1.5-flash-latest")
         api_key = get(ENV, "GOOGLE_API_KEY", "")
         if isempty(api_key)
             error("Environment variable GOOGLE_API_KEY is not set")
@@ -48,12 +52,14 @@ end
 
 """
     LlamaCppLLM
+
 Structure encapsulating the parameters for accessing the llama.cpp server API.
+
 - `api_key`: an optional API key for accessing the server
 - `model_id`: a string identifier for the model to query. Unused, kept for API compatibility.
 - `url`: the URL of the llama.cpp server OpenAI API endpoint (e.g., http://localhost:8080)
-NOTE: we do not apply the appropriate chat templates to the prompt.
-This must be handled either in an external code path or by the server.
+
+NOTE: we do not apply the appropriate chat templates to the prompt. This must be handled either in an external code path or by the server.
 """
 struct LlamaCppLLM <: OpenAILLM
     api_key::String
@@ -68,6 +74,7 @@ end
 
 """
     get_completion(llm::OpenAILLM, prompt::Prompt)
+
 Returns a completion for the given prompt using an OpenAI API compatible LLM
 """
 function get_completion(llm::OpenAILLM, prompt::Prompt)
@@ -89,6 +96,7 @@ end
 
 """
     get_completion(llm::GoogleLLM, prompt::Prompt)
+
 Returns a completion for the given prompt using the Google Gemini LLM API.
 """
 function get_completion(llm::GoogleLLM, prompt::Prompt)
@@ -110,6 +118,7 @@ end
 
 """
     stream_completion(llm::OpenAILLM, prompt::Prompt)
+
 Returns a completion for the given prompt using an OpenAI API compatible model.
 The completion is streamed to the terminal as it is generated.
 """
@@ -166,6 +175,7 @@ end
 
 """
     stream_completion(llm::GoogleLLM, prompt::Prompt)
+
 Returns a completion for the given prompt using the Google Gemini LLM API.
 The completion is streamed to the terminal as it is generated.
 """
@@ -192,6 +202,7 @@ function stream_completion(llm::GoogleLLM, prompt::Prompt)
             chunk = String(readavailable(io))
             for line in eachmatch(r"(?<=data: ).*", chunk)
                 if isnothing(line)
+                    print("\n")
                     continue
                 end
                 message = JSON3.read(line.match)
@@ -206,6 +217,7 @@ end
 
 """
     stream_completion(llm::AbstractLLM, prompt::AbstractPrompt)
+
 Returns a completion for a `prompt` using the `llm` model API.
 The completion is streamed to the terminal as it is generated.
 """
@@ -216,8 +228,9 @@ end
 
 """
     get_completion(llm::AbstractLLM, prompt::AbstractPrompt)
+
 Returns a completion for a `prompt` using the `llm` model API.
 """
-function get_completion(llm::AbstractLLM, prompt::AbstractPrompt)
-    error("Not implemented for this LLM and/or prompt type.")
+function get_completion(::AbstractLLM, ::AbstractPrompt)
+    return error("Not implemented for this LLM and/or prompt type.")
 end
