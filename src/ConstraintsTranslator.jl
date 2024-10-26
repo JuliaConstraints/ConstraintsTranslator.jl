@@ -26,6 +26,7 @@ export format_template
 export translate
 
 # Includes
+include("xcsp3.jl")
 include("prompt.jl")
 include("template.jl")
 include("llm.jl")
