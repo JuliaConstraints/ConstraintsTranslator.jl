@@ -5,20 +5,16 @@ version = "0.0.3"
 
 [deps]
 Constraints = "30f324ab-b02d-43f0-b619-e131c61659f7"
-Coverage = "a2441757-f6aa-5fb2-8edb-039e3f45d037"
-Debugger = "31a5f54b-26ea-5ae9-a837-f05ce5417438"
 HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
 InteractiveUtils = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
 JSON3 = "0f8b85d8-7281-11e9-16c2-39a750bddbf1"
 JSONSchema = "7d188eb4-7ad8-530c-ae41-71a32a6d4692"
-PkgGraph = "f9c1b9e4-72e8-4a14-ade5-14f45fc35f11"
 REPL = "3fa0cd96-eef1-5676-8a61-b3b8758bbffb"
 TestItems = "1c621080-faea-4a02-84b6-bbd5e436b8fe"
 
 [compat]
 Aqua = "0.8"
 Constraints = "0.5"
-Debugger = "0.7.10"
 HTTP = "1"
 InteractiveUtils = "1"
 JET = "0.9"
