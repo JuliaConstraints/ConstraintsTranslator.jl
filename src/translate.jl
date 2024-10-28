@@ -67,13 +67,14 @@ Returns a Markdown-formatted text containing Julia code in a code block.
 function jumpify_model(
         model::AbstractLLM,
         description::AbstractString,
+        usage::AbstractString,
         examples::AbstractString,
         interactive::Bool,
 )
     package_path = get_package_path()
     template_path = joinpath(package_path, "templates", "JumpifyModel.json")
     template = read_template(template_path)
-    prompt = format_template(template; description, examples)
+    prompt = format_template(template; description, usage, examples)
     response = stream_completion(model, prompt)
 
     if interactive
@@ -181,7 +182,12 @@ function translate(
     end
     examples = join(examples, "\n")
 
-    response = jumpify_model(model, structure, examples, interactive)
+    usage = String[]
+    for (name, docs) in XCSP_USAGE
+        push!(usage, "$(name): $(lstrip(docs))")
+    end
+    usage = join(usage, "\n")
+    response = jumpify_model(model, structure, usage, examples, interactive)
 
     return parse_code(response)["julia"]
 end
